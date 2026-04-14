@@ -8,26 +8,28 @@ This repository contains the official implementation of our paper:
 
 ## Overview
 
-Retrieval-Augmented Generation (RAG) grounds Large Language Models (LLMs) in
-external knowledge, but most deployments assume a **centralized corpus**,
-which is infeasible in privacy-aware domains where knowledge remains siloed.
-This motivates **federated RAG (FedRAG)**, where a central LLM server
-collaborates with distributed silos without sharing raw documents.
-
-**FedMosaic** is, to our knowledge, the first federated RAG framework built
-on parametric adapters. We follow the **parametric RAG** paradigm introduced
-by [PRAG](https://github.com/oneal2000/prag), which encodes each document into
-a lightweight adapter that merges with a frozen LLM at inference — so raw
-text never leaves its owner. Transplanting this idea to the federated setting
-introduces unique challenges (per-document adapters incur heavy storage and
-communication, and naively merging many adapters causes destructive
-interference), and FedMosaic adapts the parametric design to address them
-with two key components:
+Retrieval-Augmented Generation (RAG) grounds LLMs in external knowledge, but
+typically assumes a **centralized corpus**, which is infeasible when data is
+siloed across privacy-aware domains. This motivates **federated RAG
+(FedRAG)**. **FedMosaic** is, to our knowledge, the first FedRAG framework
+built on parametric adapters, following the **parametric RAG** paradigm of
+[PRAG](https://github.com/oneal2000/prag) in which each document is encoded
+into a lightweight adapter that merges with a frozen LLM at inference, so raw
+text never leaves its owner. Transplanting this to the federated setting
+raises new challenges: per-document adapters incur heavy storage and
+communication, and naive merging causes destructive interference. FedMosaic
+addresses them with two key components:
 
 - **Multi-Document Parametric Adapters.** To reduce storage and communication overhead, FedMosaic
 shares one adapter across a cluster of semantically coherent documents. 
 
 - **Selective adapter aggregation.** To mitigate inter-silo adapter interference during adapter averaging, FedMosaic aggregates only adapters associated with the most relevant documents and least conflicting parameters.
+
+<p align="center">
+  <img src="figs/overview.png" alt="FedMosaic architecture" width="90%">
+  <br>
+  <em>Overview of FedMosaic</em>
+</p>
 
 
 
@@ -80,7 +82,7 @@ match your environment:
 | `rank.rank_model_path` | Local path to the `bge-reranker-v2-m3` reranker. |
 
 Additional paths for base LLM checkpoints (e.g. `llama3.2-1b-instruct`,
-`llama3-8b-instruct`) are read inside [src/utils.py](src/utils.py) — update
+`llama3-8b-instruct`) are read inside [src/utils.py](src/utils.py); update
 them to point at your local model files.
 
 
@@ -93,7 +95,7 @@ FedMosaic is evaluated on four open-domain QA benchmarks: **HotpotQA**,
 
 You have two options.
 
-### Option A — Use the provided archive
+### Option A: Use the provided archive
 
 ```bash
 tar -xzvf dataset.tar.gz
@@ -102,7 +104,7 @@ tar -xzvf dataset.tar.gz
 This produces a `dataset/` directory with the pre-retrieved, augmented, and
 silo-split data used in our experiments.
 
-### Option B — Build from scratch
+### Option B: Build from scratch
 
 1. Set up BM25 retrieval over the DPR Wikipedia dump with Elasticsearch.
    Follow the instructions in
@@ -132,7 +134,7 @@ silo-split data used in our experiments.
 
 FedMosaic follows a two-stage pipeline.
 
-### Stage 1 — Offline: cluster documents and train adapters
+### Stage 1, Offline: cluster documents and train adapters
 
 Within each silo, documents are clustered by semantic similarity. A shared LoRA
 adapter is trained per cluster, after which document-specific binary masks are
@@ -150,7 +152,7 @@ python main.py \
 Outputs (cluster LoRAs and masks) are written to `train.save_dir` as
 configured in [config.yaml](config.yaml).
 
-### Stage 2 — Online: federated retrieval, ranking, and masked inference
+### Stage 2, Online: federated retrieval, ranking, and masked inference
 
 For each question, every silo retrieves its top-`k` passages; the reranker
 then selects relevance-aligned, non-conflicting documents, whose corresponding
