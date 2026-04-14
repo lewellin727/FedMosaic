@@ -1,0 +1,42 @@
+prep_dataset:
+  retrieve:
+    sample_size: 300
+    retrieve_size: 5
+  split:
+    silo_size: 6
+    random_seed: 42
+    alpha: 0.1
+    split_type: 'dense'
+    split_model: 'all-MiniLM-L6-v2'
+    split_model_path: 'path-to-all-MiniLM-L6-v2-model'
+  augment:
+    max_new_tokens: 512
+    temperature: 0.7
+    top_k: 20
+
+
+offline:
+  clustering:
+    C: 5                                  
+    random_seed: 42
+    eval_topk: 3
+  
+train:
+  lora_rank: 2
+  lora_alpha: 32
+  target_modules: ['down_proj', 'gate_proj', 'up_proj']
+  lr: 3e-4
+  mask_lr: 3e-1                            
+  lambda_l1: 1e-4                          
+  lora_epoch: 3                             
+  mask_epoch: 10                         
+  batch_size: 1                           
+  mask_batch_size: 1                       
+  save_dir: 'path-to-model-save'
+
+rank:
+  retrieval_K: 5
+  rank_K: 5                                                    
+  threshold: 0.5
+  lambda_ol: 0.8                          
+  rank_model_path: 'path-to-bge-reranker-v2-m3'

@@ -1,0 +1,12 @@
+dataset_name: popqa
+sample_num: 100
+
+retriever: elasticsearch
+topk: 5
+
+client_num: 6
+split_type: dirichlet
+alpha: 0.1
+split_model_path: /home/liangzhilin/model/all-MiniLM-L6-v2
+
+seed: 42
