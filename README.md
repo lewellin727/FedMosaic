@@ -5,7 +5,6 @@ This repository contains the official implementation of our paper:
 > **FedMosaic: Federated Retrieval-Augmented Generation via Parametric Adapters**
 > *Accepted at SIGIR 2026.*
 
----
 
 ## Overview
 
@@ -30,7 +29,7 @@ shares one adapter across a cluster of semantically coherent documents.
 
 - **Selective adapter aggregation.** To mitigate inter-silo adapter interference during adapter averaging, FedMosaic aggregates only adapters associated with the most relevant documents and least conflicting parameters.
 
----
+
 
 ## Repository Structure
 
@@ -54,7 +53,7 @@ FedMosaic/
 └── dataset/                      # Prepared datasets (or extract from dataset.tar.gz)
 ```
 
----
+
 
 ## Installation
 
@@ -67,7 +66,7 @@ conda create -n fedmosaic python=3.10.4
 pip install -r requirements.txt
 ```
 
----
+
 
 ## Configuration
 
@@ -85,7 +84,7 @@ Additional paths for base LLM checkpoints (e.g. `llama3.2-1b-instruct`,
 them to point at your local model files.
 
 
----
+
 
 ## Dataset Preparation
 
@@ -127,7 +126,7 @@ silo-split data used in our experiments.
    `complexwebquestions`, and `--type` with the corresponding question type
    (e.g. `bridge` / `comparison` for HotpotQA).
 
----
+
 
 ## Running FedMosaic
 
@@ -171,7 +170,7 @@ python main.py \
 Predictions and evaluation metrics are written to
 `output/fedmosaic/<dataset>/<type>/<model>/...`.
 
----
+
 
 ## Supported Models and Datasets
 
@@ -184,7 +183,7 @@ Predictions and evaluation metrics are written to
 | `--mode` | `prep_dataset`, `offline`, `online` |
 | `--k` | retrieval top-`k` per silo (online stage) |
 
----
+
 
 ## Acknowledgements
 
