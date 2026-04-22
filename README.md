@@ -62,7 +62,6 @@ FedMosaic/
 We recommend Python 3.10.4 with CUDA-enabled PyTorch.
 
 ```bash
-git clone <this-repo-url> FedMosaic
 cd FedMosaic
 conda create -n fedmosaic python=3.10.4
 pip install -r requirements.txt
@@ -92,7 +91,6 @@ them to point at your local model files.
 
 FedMosaic is evaluated on four open-domain QA benchmarks: **HotpotQA**,
 **2WikiMultiHopQA**, **PopQA**, and **ComplexWebQuestions**.
-
 You have two options.
 
 ### Option A: Use the provided archive

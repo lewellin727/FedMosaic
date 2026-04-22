@@ -27,9 +27,9 @@ class Silo:
         self.vectorizer = TfidfVectorizer()
         self.tfidf_matrix = self.vectorizer.fit_transform(self.corpus)
         
-        from sentence_transformers import SentenceTransformer
+        # from sentence_transformers import SentenceTransformer
         # self.emb_model = SentenceTransformer(embed_model_path)
-        self.corpus_embeddings = self.emb_model.encode(self.corpus, convert_to_numpy=True, normalize_embeddings=True)
+        # self.corpus_embeddings = self.emb_model.encode(self.corpus, convert_to_numpy=True, normalize_embeddings=True)
 
     def retrieve(self, question, k):
         question_vec = self.vectorizer.transform([question])
@@ -39,12 +39,12 @@ class Silo:
 
         return docs
     
-    def retrieve_emb(self, question, k):
-        q_emb = self.emb_model.encode([question], convert_to_numpy=True, normalize_embeddings=True)[0]
-        similarities = np.dot(self.corpus_embeddings, q_emb)  
-        top_k_idx = np.argsort(similarities)[-k:][::-1]
-        docs = [self.Documents[i] for i in top_k_idx]
-        return docs
+    # def retrieve_emb(self, question, k):
+    #     q_emb = self.emb_model.encode([question], convert_to_numpy=True, normalize_embeddings=True)[0]
+    #     similarities = np.dot(self.corpus_embeddings, q_emb)  
+    #     top_k_idx = np.argsort(similarities)[-k:][::-1]
+    #     docs = [self.Documents[i] for i in top_k_idx]
+    #     return docs
 
     def retrieve_with_scores(self, question, k):
         question_vec = self.vectorizer.transform([question])

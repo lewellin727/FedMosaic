@@ -51,7 +51,7 @@ def online(root_dir, dataset_name, model_name, augment_model, dataset_type, conf
         print(f'Retrieving from silos...')
         documents = []
         for silo in silos:
-            documents.extend(silo.retrieve_emb(questions[idx], k=K))
+            documents.extend(silo.retrieve(questions[idx], k=K))
         
         print(f'Ranking target docs...')
         doc_ids, doc_scores = fedranking(questions[idx], documents, mask_save_dir, config, reranker)
